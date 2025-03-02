@@ -1,3 +1,4 @@
+// Element selectors
 const sideMenu = document.querySelector('#sideMenu');
 const navBar = document.querySelector("nav");
 const navLinks = document.querySelector("nav ul");
@@ -29,10 +30,8 @@ function parallaxEffect() {
 
 // Navbar scroll effect
 window.addEventListener('scroll', () => {
-    // Parallax effect
     parallaxEffect();
     
-    // Navbar effect
     if (scrollY > 50) {
         navBar.classList.add('bg-white/80', 'backdrop-blur-lg', 'shadow-sm', 'dark:bg-darkTheme/80', 'dark:shadow-white/20');
         navLinks.classList.remove('bg-white/50', 'shadow-sm', 'dark:border', 'dark:border-white/20', "dark:bg-glassLight");
@@ -41,7 +40,6 @@ window.addEventListener('scroll', () => {
         navLinks.classList.add('bg-white/50', 'shadow-sm', 'dark:border', 'dark:border-white/20', "dark:bg-glassLight");
     }
     
-    // Reveal elements on scroll
     revealOnScroll();
 });
 
@@ -54,7 +52,6 @@ function revealOnScroll() {
         if (sectionTop < triggerBottom) {
             section.classList.add('appear');
             
-            // Animate children with staggered delay
             const animatableElements = section.querySelectorAll('.animate-on-scroll');
             animatableElements.forEach((el, index) => {
                 setTimeout(() => {
@@ -64,7 +61,6 @@ function revealOnScroll() {
         }
     });
     
-    // Animate skill bars when in view
     document.querySelectorAll('.skill-progress').forEach((container, index) => {
         const barTop = container.getBoundingClientRect().top;
         const bar = container.querySelector('.progress-fill');
@@ -75,7 +71,7 @@ function revealOnScroll() {
                     const percentage = container.getAttribute('data-percentage') || '0%';
                     bar.style.width = percentage;
                 }
-            }, 300 + (100 * index)); // Staggered animation
+            }, 300 + (100 * index));
         }
     });
 }
@@ -84,7 +80,6 @@ function revealOnScroll() {
 function toggleTheme() {
     document.documentElement.classList.toggle('dark');
     
-    // Add transition effect to body
     document.body.classList.add('theme-transition');
     setTimeout(() => {
         document.body.classList.remove('theme-transition');
@@ -144,7 +139,6 @@ function initTypewriterEffect() {
             }
         }
         
-        // Start typing when element is in view
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -189,7 +183,6 @@ window.addEventListener('DOMContentLoaded', () => {
     initTypewriterEffect();
     initHoverEffect();
     
-    // Add appear class to elements with delay
     document.querySelectorAll('.hero-element').forEach((el, index) => {
         setTimeout(() => {
             el.classList.add('appear');
@@ -200,4 +193,59 @@ window.addEventListener('DOMContentLoaded', () => {
 // Add resize event listener for responsiveness
 window.addEventListener('resize', () => {
     revealOnScroll();
+});
+
+// Enhanced typing effect for the About section
+document.addEventListener('DOMContentLoaded', function() {
+    const aboutTypingTexts = document.querySelectorAll('#about .typing-text');
+    
+    aboutTypingTexts.forEach(element => {
+        const text = element.textContent;
+        element.textContent = '';
+        element.classList.add('typing-cursor');
+        
+        let charIndex = 0;
+        const typeInterval = setInterval(() => {
+            if (charIndex < text.length) {
+                element.textContent += text.charAt(charIndex);
+                charIndex++;
+            } else {
+                clearInterval(typeInterval);
+                element.classList.remove('typing-cursor');
+                
+                setTimeout(() => {
+                    element.textContent = '';
+                    element.classList.add('typing-cursor');
+                    
+                    let newCharIndex = 0;
+                    const newTypeInterval = setInterval(() => {
+                        if (newCharIndex < text.length) {
+                            element.textContent += text.charAt(newCharIndex);
+                            newCharIndex++;
+                        } else {
+                            clearInterval(newTypeInterval);
+                            element.classList.remove('typing-cursor');
+                        }
+                    }, 100);
+                }, 5000);
+            }
+        }, 100);
+    });
+    
+    const profileContainer = document.querySelector('.profile-container');
+    if (profileContainer) {
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { left, top, width, height } = profileContainer.getBoundingClientRect();
+            
+            const x = (clientX - left - width / 2) / 25;
+            const y = (clientY - top - height / 2) / 25;
+            
+            profileContainer.style.transform = `translate(${-x}px, ${-y}px)`;
+        });
+        
+        profileContainer.addEventListener('mouseleave', () => {
+            profileContainer.style.transform = 'translate(0, 0)';
+        });
+    }
 });
