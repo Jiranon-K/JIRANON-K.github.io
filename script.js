@@ -92,8 +92,8 @@ function toggleTheme() {
     }
 }
 
-// Initialize dark mode
-if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+// Initialize theme (light theme as default)
+if (localStorage.theme === 'dark') {
     document.documentElement.classList.add('dark');
 } else {
     document.documentElement.classList.remove('dark');
